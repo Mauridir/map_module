@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingresar Datos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input, select {
+            width: 100%;
+            padding: 5px;
+            margin: 10px 0;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #2d16db;
+            color: white;
+            border: white;
+            cursor: pointer;
+        }
+        #imageContainer {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        #imageContainer img {
+            max-width: 100%;
+            height: auto;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+	    color: red;
+        }
+        .piloto {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+<h2>Ingresar Datos</h2>
+
+<form id="datosForm">
+    <!-- Campos Cliente, Campo, Lote -->
+    <label>Cliente:</label>
+    <input type="text" id="cliente" required>
+
+    <label>Campo:</label>
+    <input type="text" id="campo" required>
+
+    <label>Lote:</label>
+    <input type="text" id="lote" required>
+
+    <!-- Cantidad total de hectáreas y Caudal por hectárea -->
+    <label>Cantidad total de hectáreas:</label>
+    <input type="number" id="totalHectareas" step="0.01" required>
+
+    <label>Caudal por hectárea:</label>
+    <input type="number" id="caudalHectarea" step="0.01" required>
+
+    <!-- Lista desplegable para Piloto -->
+    <label>Piloto:</label>
+    <select id="piloto" required>
+        <option value="Mauri">Mauri</option>
+        <option value="Maximo">Maximo</option>
+        <option value="Ruben">Ruben</option>
+    </select>
+
+    <!-- Lista desplegable para Equipo de Tierra -->
+    <label>Equipo de Tierra:</label>
+    <select id="equipoTierra" required>
+        <option value="Marcos">Marcos</option>
+        <option value="Belen">Belen</option>
+        <option value="Mariana">Mariana</option>
+        <option value="Diana">Diana</option>
+        <option value="Ruben">Ruben</option>
+    </select>
+
+    <!-- Productos y dosis -->
+    <h3>Productos y Dosis</h3>
+
+    <label>Producto 1:</label>
+    <input type="text" id="producto1">
+    <label>Dosis Producto 1 (L/Ha):</label>
+    <input type="number" id="dosis1" step="0.01">
+
+    <label>Producto 2:</label>
+    <input type="text" id="producto2">
+    <label>Dosis Producto 2 (L/Ha):</label>
+    <input type="number" id="dosis2" step="0.01">
+
+    <label>Producto 3:</label>
+    <input type="text" id="producto3">
+    <label>Dosis Producto 3 (L/Ha):</label>
+    <input type="number" id="dosis3" step="0.01">
+
+    <label>Producto 4:</label>
+    <input type="text" id="producto4">
+    <label>Dosis Producto 4 (L/Ha):</label>
+    <input type="number" id="dosis4" step="0.01">
+
+    <label>Producto 5:</label>
+    <input type="text" id="producto5">
+    <label>Dosis Producto 5 (L/Ha):</label>
+    <input type="number" id="dosis5" step="0.01">
+
+    <label>Producto 6:</label>
+    <input type="text" id="producto6">
+    <label>Dosis Producto 6 (L/Ha):</label>
+    <input type="number" id="dosis6" step="0.01">
+
+    <!-- Input para la cantidad de vuelos -->
+    <label>Cantidad de vuelos:</label>
+    <input type="number" id="cantidadVuelos" required>
+
+    <!-- Contenedor para mostrar la imagen pegada -->
+    <div id="imageContainer">
+        <p>Pega una imagen aquí usando Ctrl + V</p>
+    </div>
+
+    <!-- Botones para generar PDF y reiniciar la página -->
+    <div class="buttons">
+        <button type="button" onclick="generarPDF()">Generar PDF</button>
+        <button type="button" onclick="reiniciar()">Nuevo</button>
+        <button type="button" onclick="calculosEquipoTierra()">Cálculos equipo de tierra</button>
+    </div>
+</form>
+
+<script src="js/jspdf.umd.min1.js"></script>
+<script src="js/index1.js"></script>
+
+
+
+</body>
+</html>

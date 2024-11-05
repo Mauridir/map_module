@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Trabajo</title>
+    <!-- Incluyendo librería SheetJS para exportar Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <style>
+        label, input, select {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Ingresar Datos del Trabajo</h2>
+
+<form id="registroTrabajoForm">
+    <!-- Fecha del trabajo -->
+    <label>Fecha:</label>
+    <input type="date" id="fecha" required>
+
+    <!-- Datos del trabajo -->
+    <label>Cliente:</label>
+    <input type="text" id="cliente" required>
+
+    <label>Campo:</label>
+    <input type="text" id="campo" required>
+
+    <label>Lote:</label>
+    <input type="text" id="lote" required>
+
+    <label>Cantidad total de hectáreas:</label>
+    <input type="number" id="totalHectareas" step="0.01" required>
+
+    <label>Caudal (L/ha):</label>
+    <input type="number" id="caudal" step="0.01" required>
+
+    <label>Precio (USD):</label>
+    <input type="number" id="precio" step="0.01" required>
+
+    <label>Orden de trabajo asociada:</label>
+    <input type="text" id="ordenTrabajo" required>
+
+    <!-- Hora de inicio y fin -->
+    <h3>Horarios</h3>
+    <label>Hora de Inicio:</label>
+    <input type="time" id="horaInicio" required>
+
+    <label>Hora de Fin:</label>
+    <input type="time" id="horaFin" required>
+
+    <!-- Tiempo total -->
+    <label>Tiempo total (horas):</label>
+    <input type="number" id="tiempoTotal" step="0.01" required>
+
+    <!-- Piloto, avión y equipo de tierra -->
+    <label>Piloto:</label>
+    <select id="piloto" required>
+        <option value="Mauri">Mauri</option>
+        <option value="Maximo">Maximo</option>
+        <option value="Ruben">Ruben</option>
+    </select>
+
+    <label>Avión:</label>
+    <select id="avion" required>
+        <option value="Air Tractor">Air Tractor</option>
+        <option value="Bravo">Bravo</option>
+    </select>
+
+    <label>Equipo de Tierra:</label>
+    <select id="equipoTierra" required>
+        <option value="Marcos">Marcos</option>
+        <option value="Belen">Belen</option>
+        <option value="Mariana">Mariana</option>
+        <option value="Diana">Diana</option>
+        <option value="Ruben">Ruben</option>
+    </select>
+
+    <!-- Combustible utilizado -->
+    <h3>Combustible</h3>
+    <label>Combustible utilizado (litros):</label>
+    <input type="number" id="combustible" step="0.01" required>
+
+    <!-- Productos y dosis -->
+    <h3>Productos y Dosis</h3>
+    <label>Producto 1:</label>
+    <input type="text" id="producto1">
+    <label>Dosis Producto 1:</label>
+    <input type="number" id="dosis1" step="0.01">
+
+    <label>Producto 2:</label>
+    <input type="text" id="producto2">
+    <label>Dosis Producto 2:</label>
+    <input type="number" id="dosis2" step="0.01">
+
+    <label>Producto 3:</label>
+    <input type="text" id="producto3">
+    <label>Dosis Producto 3:</label>
+    <input type="number" id="dosis3" step="0.01">
+
+    <label>Producto 4:</label>
+    <input type="text" id="producto4">
+    <label>Dosis Producto 4:</label>
+    <input type="number" id="dosis4" step="0.01">
+
+    <label>Producto 5:</label>
+    <input type="text" id="producto5">
+    <label>Dosis Producto 5:</label>
+    <input type="number" id="dosis5" step="0.01">
+
+    <label>Producto 6:</label>
+    <input type="text" id="producto6">
+    <label>Dosis Producto 6:</label>
+    <input type="number" id="dosis6" step="0.01">
+
+    <!-- Botón para guardar el trabajo -->
+    <button type="button" onclick="guardarTrabajo()">Guardar Trabajo</button>
+    <button type="button" onclick="cargarNuevoTrabajo()">Cargar nuevo trabajo</button>
+</form>
+
+<script>
+    function guardarTrabajo() {
+        let trabajo = {
+            fecha: document.getElementById('fecha').value,
+            cliente: document.getElementById('cliente').value,
+            campo: document.getElementById('campo').value,
+            lote: document.getElementById('lote').value,
+            hectareas: document.getElementById('totalHectareas').value,
+            caudal: document.getElementById('caudal').value,
+            precio: document.getElementById('precio').value,
+            ordenTrabajo: document.getElementById('ordenTrabajo').value,
+            horarios: {
+                inicio: document.getElementById('horaInicio').value,
+                fin: document.getElementById('horaFin').value,
+                tiempoTotal: document.getElementById('tiempoTotal').value
+            },
+            piloto: document.getElementById('piloto').value,
+            avion: document.getElementById('avion').value,
+            equipoTierra: document.getElementById('equipoTierra').value,
+            combustible: document.getElementById('combustible').value,
+            productos: []
+        };
+
+        // Guardar productos
+        for (let i = 1; i <= 6; i++) {
+            let producto = document.getElementById(`producto${i}`).value;
+            let dosis = document.getElementById(`dosis${i}`).value;
+            if (producto && dosis) {
+                trabajo.productos.push({ producto, dosis });
+            }
+        }
+
+        // Guardar en localStorage
+        localStorage.setItem('trabajo_' + Date.now(), JSON.stringify(trabajo));
+        alert('Trabajo guardado');
+    }
+
+    function cargarNuevoTrabajo() {
+        document.getElementById('registroTrabajoForm').reset();
+    }
+</script>
+
+<h2>Estadísticas del Trabajo</h2>
+
+<button type="button" onclick="exportarExcel()">Exportar a Excel</button>
+
+<script>
+    function exportarExcel() {
+        let trabajos = [];
+
+        // Obtener los trabajos desde localStorage
+        for (let i = 0; i < localStorage.length; i++) {
+            let key = localStorage.key(i);
+            if (key.startsWith('trabajo_')) {
+                let trabajo = JSON.parse(localStorage.getItem(key));
+                trabajos.push(trabajo);
+            }
+        }
+
+        // Convertir los datos a formato Excel
+        let worksheetData = trabajos.map(trabajo => ({
+            Fecha: trabajo.fecha,
+            Cliente: trabajo.cliente,
+            Campo: trabajo.campo,
+            Lote: trabajo.lote,
+            Hectareas: trabajo.hectareas,
+            Caudal: trabajo.caudal,
+            Precio: `$${trabajo.precio} USD`,
+            'Orden de Trabajo': trabajo.ordenTrabajo,
+            'Hora Inicio': trabajo.horarios.inicio,
+            'Hora Fin': trabajo.horarios.fin,
+            'Tiempo Total': trabajo.horarios.tiempoTotal,
+            Piloto: trabajo.piloto,
+            Avión: trabajo.avion,
+            'Equipo de Tierra': trabajo.equipoTierra,
+            Combustible: trabajo.combustible,
+            'Producto 1': trabajo.productos[0] ? trabajo.productos[0].producto : '',
+            'Dosis 1': trabajo.productos[0] ? trabajo.productos[0].dosis : '',
+            'Producto 2': trabajo.productos[1] ? trabajo.productos[1].producto : '',
+            'Dosis 2': trabajo.productos[1] ? trabajo.productos[1].dosis : '',
+            'Producto 3': trabajo.productos[2] ? trabajo.productos[2].producto : '',
+            'Dosis 3': trabajo.productos[2] ? trabajo.productos[2].dosis : '',
+            'Producto 4': trabajo.productos[3] ? trabajo.productos[3].producto : '',
+            'Dosis 4': trabajo.productos[3] ? trabajo.productos[3].dosis : '',
+            'Producto 5': trabajo.productos[4] ? trabajo.productos[4].producto : '',
+            'Dosis 5': trabajo.productos[4] ? trabajo.productos[4].dosis : '',
+            'Producto 6': trabajo.productos[5] ? trabajo.productos[5].producto : '',
+            'Dosis 6': trabajo.productos[5] ? trabajo.productos[5].dosis : ''
+        }));
+
+        // Crear la hoja de Excel
+        let worksheet = XLSX.utils.json_to_sheet(worksheetData);
+        let workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Trabajos");
+
+        // Exportar como archivo Excel
+        XLSX.writeFile(workbook, 'trabajos_realizados.xlsx');
+    }
+</script>
+
+</body>
+</html>

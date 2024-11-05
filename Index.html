@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingresar Datos</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
+    <script src="js/index.js"></script>
+    <script src="js/jspdf.umd.min.js"></script>
+</head>
+<body class="container my-5">
+
+    <h2 class="text-center mb-4">Ingresar Datos</h2>
+
+    <form id="datosForm">
+        <!-- Campos Cliente, Campo, Lote -->
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="cliente">Cliente</label>
+                <input type="text" id="cliente" class="form-control" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="campo">Campo</label>
+                <input type="text" id="campo" class="form-control" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="lote">Lote</label>
+                <input type="text" id="lote" class="form-control" required>
+            </div>
+        </div>
+
+        <!-- Cantidad total de hectáreas y Caudal por hectárea -->
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="totalHectareas">Cantidad total de hectáreas</label>
+                <input type="number" id="totalHectareas" step="0.01" class="form-control" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="caudalHectarea">Caudal por hectárea</label>
+                <input type="number" id="caudalHectarea" step="0.01" class="form-control" required>
+            </div>
+        </div>
+
+        <!-- Lista desplegable para Piloto y Equipo de Tierra -->
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="piloto">Piloto</label>
+                <select id="piloto" class="form-control" required>
+                    <option value="Mauri">Mauri</option>
+                    <option value="Maximo">Maximo</option>
+                    <option value="Ruben">Ruben</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="equipoTierra">Equipo de Tierra</label>
+                <select id="equipoTierra" class="form-control" required>
+                    <option value="Marcos">Marcos</option>
+                    <option value="Belen">Belen</option>
+                    <option value="Mariana">Mariana</option>
+                    <option value="Diana">Diana</option>
+                    <option value="Ruben">Ruben</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Productos y dosis -->
+        <h3 class="my-3">Productos y Dosis</h3>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="producto1">Producto 1</label>
+                <input type="text" id="producto1" class="form-control">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="dosis1">Dosis Producto 1 (L/Ha)</label>
+                <input type="number" id="dosis1" step="0.01" class="form-control">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="cantidadVuelos">Cantidad de vuelos</label>
+                <input type="number" id="cantidadVuelos" class="form-control" required>
+            </div>
+        </div>
+
+        <!-- Contenedor para mostrar la imagen pegada -->
+        <div id="imageContainer" class="my-3 border p-3 text-center">
+            <p>Pega una imagen aquí usando Ctrl + V</p>
+        </div>
+
+        <!-- Botones para generar PDF y reiniciar la página -->
+        <div class="form-group text-center">
+            <button type="button" class="btn btn-primary mx-1" onclick="generarPDF()">Generar PDF</button>
+            <button type="button" class="btn btn-secondary mx-1" onclick="reiniciar()">Nuevo</button>
+            <button type="button" class="btn btn-info mx-1" onclick="calculosEquipoTierra()">Cálculos equipo de tierra</button>
+        </div>
+    </form>
+
+    <script src="js/bootstrap/jquery-3.5.1.slim.min.js"></script>
+    <script src="js/bootstrap/popper.min.js"></script>
+    <script src="js/bootstrap/bootstrap.esm.js"></script>
+</body>
+</html>
