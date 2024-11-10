@@ -2,7 +2,7 @@ function generarPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
-  doc.addImage("../img/Logo.jpg", "JPG", 10, 10, 50, 30); // Posición y tamaño de la imagen
+  doc.addImage("../img/Logo.jpg", "JPG", 72, 260, 65, 39); // Posición y tamaño de la imagen
 
   // Configuración inicial del PDF
   doc.setFontSize(10);
@@ -32,6 +32,7 @@ function agregarDatosPDF(doc) {
   const caudalHectarea = document.getElementById("caudalHectarea").value;
   const piloto = document.getElementById("piloto").value;
   const equipoTierra = document.getElementById("equipoTierra").value;
+  const cantidadVuelos = document.getElementById("cantidadVuelos").value;
 
   // Obtener productos dinámicos
   const productos = [];
@@ -116,7 +117,7 @@ function reiniciar() {
   // Eliminar todos los productos adicionales
   const productosContainer = document.getElementById("productosContainer");
   productosContainer.innerHTML = "";
-  productoCounter = 1;
+  productoCounter = 0;
 }
 
 // Función para generar el PDF de cálculos de equipo de tierra
@@ -124,50 +125,56 @@ function calculosEquipoTierra() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
-  var totalHectareas = parseFloat(
-    document.getElementById("totalHectareas").value
-  );
-  var caudalHectarea = parseFloat(
-    document.getElementById("caudalHectarea").value
-  );
-  var cantidadVuelos = parseInt(
-    document.getElementById("cantidadVuelos").value
-  );
+  var totalHectareas = parseFloat(document.getElementById("totalHectareas").value);
+  var caudalHectarea = parseFloat(document.getElementById("caudalHectarea").value);
+  var cantidadVuelos = parseInt(document.getElementById("cantidadVuelos").value);
+
+  // Validación de valores
+  if (isNaN(totalHectareas) || isNaN(caudalHectarea) || isNaN(cantidadVuelos) || cantidadVuelos <= 0) {
+      console.error("Valores inválidos para el cálculo de caldo total por vuelo.");
+      return;
+  }
 
   // Cálculo del caldo total por vuelo
   var caldoTotalPorVuelo = (caudalHectarea * totalHectareas) / cantidadVuelos;
 
-  // Añadir productos y dosis por vuelo
+  // Añadir título y cálculo de caldo al PDF
   doc.setFontSize(12);
   doc.text("Cálculos equipo de tierra", 20, 20);
   doc.text(
-    `Cantidad total de caldo por vuelo: ${caldoTotalPorVuelo.toFixed(
-      2
-    )} litros`,
-    20,
-    40
+      `Cantidad total de caldo por vuelo: ${caldoTotalPorVuelo.toFixed(2)} litros`,
+      20,
+      40
   );
 
+  // Añadir productos y dosis
   var productos = [];
-  for (var i = 1; i <= 6; i++) {
-    var producto = document.getElementById("producto" + i).value;
-    var dosis = parseFloat(document.getElementById("dosis" + i).value);
-    if (producto && dosis) {
-      var productoPorVuelo = (dosis * totalHectareas) / cantidadVuelos;
-      productos.push({ producto, productoPorVuelo });
-      doc.text(
-        `${producto}: ${productoPorVuelo.toFixed(2)} unidades por vuelo`,
-        20,
-        50 + i * 10
-      );
-    }
+  for (var i = 0; i <= 6; i++) {
+      var productoElement = document.getElementById("producto" + i);
+      var dosisElement = document.getElementById("dosis" + i);
+
+      if (productoElement && dosisElement) {
+          var producto = productoElement.value;
+          var dosis = parseFloat(dosisElement.value);
+
+          if (producto && !isNaN(dosis)) {
+              var productoPorVuelo = (dosis * totalHectareas) / cantidadVuelos;
+              productos.push({ producto, productoPorVuelo });
+              doc.text(
+                  `${producto}: ${productoPorVuelo.toFixed(2)} unidades por vuelo`,
+                  20,
+                  50 + i * 10
+              );
+          }
+      }
   }
 
   // Guardar el PDF
   doc.save("calculos_equipo_tierra.pdf");
 }
 
-let productoCounter = 1;
+
+let productoCounter = 0;
 
 function agregarProducto() {
   productoCounter++;
@@ -187,9 +194,7 @@ function agregarProducto() {
           <input type="number" id="dosis${productoCounter}" step="0.01" class="form-control" />
         </div>
         <div class="form-group col-md-4">
-          <label for="cantidadVuelos${productoCounter}">Cantidad de vuelos</label>
-          <input type="number" id="cantidadVuelos${productoCounter}" class="form-control" />
-        </div>
+
       `;
 
   productosContainer.appendChild(productoRow);
