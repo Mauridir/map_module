@@ -2,7 +2,7 @@ function generarPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
-  doc.addImage("../img/Logo.jpg", "JPG", 72, 260, 65, 39); // Posición y tamaño de la imagen
+  doc.addImage("../img/Logo.png", "PNG", 72, 260, 65, 39); // Posición y tamaño de la imagen
 
   // Configuración inicial del PDF
   doc.setFontSize(10);
